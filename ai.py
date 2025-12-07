@@ -35,7 +35,7 @@ def minmax(board, depth, maximizing_player, player, alpha, beta):
              return minmax(board, depth-1, False, player, alpha, beta)
              
         for move in valid_moves:
-            new_board = apply_move(board, move[0], move[1], player)
+            new_board, _ = apply_move(board, move[0], move[1], player)
             eval = minmax(new_board, depth-1, False, player, alpha, beta)
             max_eval = max(max_eval, eval)
             alpha = max(alpha, eval)
@@ -49,7 +49,7 @@ def minmax(board, depth, maximizing_player, player, alpha, beta):
             return minmax(board, depth-1, True, player, alpha, beta)
             
         for move in valid_moves:
-            new_board = apply_move(board, move[0], move[1], opponent)
+            new_board, _ = apply_move(board, move[0], move[1], opponent)
             eval = minmax(new_board, depth-1, True, player, alpha, beta)
             min_eval = min(min_eval, eval)
             beta = min(beta, eval)
@@ -68,7 +68,7 @@ def get_best_move(board, player, depth=3):
         return None
         
     for move in valid_moves:
-        new_board = apply_move(board, move[0], move[1], player)
+        new_board, _ = apply_move(board, move[0], move[1], player)
         eval = minmax(new_board, depth-1, False, player, alpha, beta)
         if eval > max_eval:
             max_eval = eval

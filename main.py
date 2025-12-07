@@ -2,7 +2,7 @@ import time
 from colorama import Fore, Style
 from constants import BLACK, WHITE, EMPTY
 from game_logic import create_board, is_game_over, get_winner, get_score, has_valid_move, apply_move
-from ui import print_board, print_score, print_message, clear_screen, print_welcome
+from ui import print_board, print_score, print_message, clear_screen, print_welcome, animate_flip
 from player import get_human_move
 from ai import get_best_move
 
@@ -79,7 +79,8 @@ def main():
                     current_player = WHITE if current_player == BLACK else BLACK
                     continue
                     
-        board = apply_move(board, row, col, current_player)
+        board, flipped_groups = apply_move(board, row, col, current_player)
+        animate_flip(flipped_groups, current_player, (row, col))
         current_player = WHITE if current_player == BLACK else BLACK
         
     clear_screen()

@@ -52,6 +52,8 @@ def apply_move(board, row, col, player):
     directions = [(-1, -1), (-1, 0), (-1, 1),
                   (0, -1),           (0, 1),
                   (1, -1),  (1, 0),  (1, 1)]
+    
+    flipped_groups = []
                   
     for dr, dc in directions:
         r, c = row + dr, col + dc
@@ -61,10 +63,12 @@ def apply_move(board, row, col, player):
             r += dr
             c += dc
         if is_on_board(r, c) and new_board[r][c] == player:
-            for fr, fc in to_flip:
-                new_board[fr][fc] = player
+            if to_flip:
+                flipped_groups.append(to_flip)
+                for fr, fc in to_flip:
+                    new_board[fr][fc] = player
                 
-    return new_board
+    return new_board, flipped_groups
 
 def has_valid_move(board, player):
     return len(get_valid_moves(board, player)) > 0
