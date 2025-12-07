@@ -1,0 +1,18 @@
+BOARD_SIZE = 8
+EMPTY = 0
+BLACK = 1
+WHITE = 2
+
+TOP_LEFT = '\u250c'
+TOP_RIGHT = '\u2510'
+BOTTOM_LEFT = '\u2514'
+BOTTOM_RIGHT = '\u2518'
+HORIZONTAL = '\u2500'
+VERTICAL = '\u2502'
+T_DOWN = '\u252c'
+T_UP = '\u2534'
+T_RIGHT = '\u251c'
+T_LEFT = '\u2524'
+CROSS = '\u253c'
+
+PIECE = '\u25cf'
