@@ -12,12 +12,17 @@ A clean, console-based implementation of the classic board game Othello (also kn
     *   Colored pieces (Red for Black, Cyan for White) for easy distinction.
     *   Clear screen updates for a smooth experience.
 *   **AI**:
-    *   Implements a MinMax algorithm to determine the best moves.
+    *   **Advanced Strategy**: Uses a sophisticated evaluation function considering board position, mobility, and coin parity.
+    *   **Iterative Deepening**: Searches progressively deeper within a time limit to find the best move.
+    *   **Endgame Solver**: Calculates the perfect sequence of moves when near the end of the game.
+    *   **Alpha-Beta Pruning**: Optimizes the search process.
 
 ## Requirements
 
 *   Python 3.x
 *   `colorama` library
+*   `bext` library (for animations)
+*   `tqdm` library (for benchmarking)
 
 ## Installation
 
@@ -59,7 +64,9 @@ A clean, console-based implementation of the classic board game Othello (also kn
 
 *   `main.py`: Entry point of the game.
 *   `game_logic.py`: Core game rules and mechanics.
-*   `ai.py`: AI implementation (MinMax algorithm).
+*   `ai_improved.py`: Advanced AI implementation (Iterative Deepening, Heuristics).
+*   `ai.py`: Legacy AI implementation (Basic MinMax).
 *   `ui.py`: User interface and display logic.
 *   `player.py`: Input handling for human players.
 *   `constants.py`: Global constants and configuration.
+*   `testing/`: Contains benchmarking tools and analysis notebooks.

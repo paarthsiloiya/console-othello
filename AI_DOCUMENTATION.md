@@ -1,65 +1,50 @@
 # AI Documentation
 
-This document explains the current AI implementation for the Console Othello game and provides suggestions for future improvements.
+This document explains the AI implementations for the Console Othello game.
 
-## Current Implementation
+## Improved AI (`new_ai.py`)
 
-The AI uses a **MinMax Algorithm** to decide its moves. This is a recursive algorithm used for decision-making in game theory and artificial intelligence.
+The default AI for the game is now a significantly more advanced agent that uses several techniques to play at a high level.
 
-### How it Works
+### Core Algorithm
+*   **MinMax with Alpha-Beta Pruning**: The foundation is still the standard MinMax algorithm optimized with Alpha-Beta pruning to cut off irrelevant branches of the search tree.
+*   **Iterative Deepening**: Instead of searching to a fixed depth, the AI searches to depth 1, then depth 2, and so on, until a time limit (2 seconds) is reached. This ensures the AI always has a valid move ready and uses its time efficiently.
 
-1.  **Search Tree**: The AI simulates future game states by exploring possible moves for itself and the opponent.
-2.  **Depth**: The algorithm looks ahead a fixed number of turns (currently set to **3**).
-    *   Depth 0: The current board state.
-    *   Depth 1: All possible moves for the AI.
-    *   Depth 2: All possible responses by the opponent.
-    *   Depth 3: All possible counter-responses by the AI.
-3.  **Evaluation Function**: At the maximum depth (leaf nodes) or if the game ends, the board state is evaluated to give it a numerical score.
-    *   **Maximizing Player (AI)**: Tries to choose the move that leads to the highest score.
-    *   **Minimizing Player (Human)**: Assumed to play optimally, choosing the move that leads to the lowest score for the AI.
+### Evaluation Function (Heuristics)
+The AI evaluates board states using a weighted combination of three factors, which changes dynamically based on the game phase (Opening, Midgame, Endgame):
 
-### Heuristics
+1.  **Positional Strategy (Static Weights)**:
+    *   The board is mapped to a grid of weights.
+    *   **Corners** are highly valued (+100).
+    *   **C-squares and X-squares** (adjacent to corners) are penalized (-20, -50) to avoid giving corners to the opponent.
+    *   Edges are slightly positive.
 
-The current evaluation function (`evaluate_board` in `ai.py`) uses a simple heuristic:
+2.  **Mobility**:
+    *   The AI attempts to maximize its own number of valid moves while minimizing the opponent's options.
+    *   This forces the opponent into bad positions.
 
-1.  **Piece Count**: The basic score is the difference between the AI's pieces and the opponent's pieces.
-2.  **Corner Control**: Corners are extremely valuable in Othello because they cannot be flipped once taken.
-    *   The AI assigns a bonus of **25 points** for owning a corner.
-    *   This encourages the AI to prioritize moves that secure corners.
+3.  **Coin Parity**:
+    *   Simply having more pieces than the opponent.
+    *   This is given very low weight in the opening/midgame but becomes the primary factor in the endgame.
 
-### Alpha-Beta Pruning
+### Endgame Solver
+When there are **10 or fewer empty squares** remaining, the AI switches to a "perfect" solver. It searches the entire remaining game tree to find the absolute best sequence of moves to win the game, ignoring the time limit if necessary to ensure victory.
 
-The implementation includes **Alpha-Beta Pruning** optimization. This significantly reduces the number of nodes evaluated in the search tree by stopping the evaluation of a move when at least one possibility has been found that proves the move to be worse than a previously examined move.
+---
 
-## How to Improve the AI
+## Legacy AI (`old_ai.py`)
 
-The current AI is competent but basic. Here are several ways to make it stronger:
+The original AI is kept for comparison and benchmarking purposes.
 
-### 1. Better Heuristics (Evaluation Function)
-The current function relies heavily on piece count, which is actually a poor metric in the early and mid-game of Othello. Better metrics include:
+*   **Algorithm**: Fixed-depth MinMax (Depth 3).
+*   **Heuristics**: Simple piece count + Corner bonus (25 points).
+*   **Weakness**: It is greedy for pieces early in the game, which is often a losing strategy in Othello.
 
-*   **Mobility**: The number of valid moves available to a player. Forcing the opponent into a state with few moves is a strong strategy.
-*   **Stability**: Pieces that can never be flipped (e.g., corners and edges connected to corners) are "stable".
-*   **Edge Play**: Assign different weights to different squares. For example, the squares immediately adjacent to corners (C-squares and X-squares) are often dangerous to take and should have negative weights.
-*   **Parity**: In the endgame, having the last move in a region is advantageous.
+## Future Improvements
 
-### 2. Dynamic Weighting
-The importance of different heuristics changes throughout the game.
-*   **Opening/Mid-game**: Prioritize Mobility and Positional Strategy (avoiding bad squares).
-*   **Endgame**: Prioritize Piece Count (Coin Parity).
+While the new AI is strong, it can still be improved:
 
-### 3. Increased Search Depth
-*   Increasing the depth from 3 to 5 or 6 will make the AI significantly smarter but slower.
-*   Optimizing the code or using a faster language (like C++) would allow for deeper searches.
-
-### 4. Iterative Deepening
-Instead of a fixed depth, the AI can search to depth 1, then depth 2, etc., within a time limit. This ensures the AI always has a move ready if time runs out.
-
-### 5. Transposition Table
-Store board states that have already been evaluated to avoid re-calculating them if the search reaches the same position via a different sequence of moves.
-
-### 6. Opening Book
-Use a database of standard opening moves to play perfectly for the first few turns, saving computation time and avoiding early traps.
-
-### 7. Endgame Solver
-When there are few empty squares left (e.g., 10-12), the AI can switch to a "perfect" solver that searches to the very end of the game to find the absolute best sequence of moves to win.
+1.  **Transposition Table**: Store evaluated board states to avoid re-calculating the same position reached via different move orders.
+2.  **Opening Book**: Use a database of standard openings to play instantly and perfectly for the first 10-15 moves.
+3.  **Pattern Recognition**: Instead of static weights, recognize specific edge and corner patterns (e.g., "Stoner Trap").
+4.  **MCTS (Monte Carlo Tree Search)**: An alternative to MinMax that can be very effective, especially when combined with neural networks (like AlphaZero).
