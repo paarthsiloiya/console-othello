@@ -9,6 +9,8 @@ The default AI for the game is now a significantly more advanced agent that uses
 ### Core Algorithm
 *   **MinMax with Alpha-Beta Pruning**: The foundation is still the standard MinMax algorithm optimized with Alpha-Beta pruning to cut off irrelevant branches of the search tree.
 *   **Iterative Deepening**: Instead of searching to a fixed depth, the AI searches to depth 1, then depth 2, and so on, until a time limit (2 seconds) is reached. This ensures the AI always has a valid move ready and uses its time efficiently.
+*   **Transposition Table**: A hash map stores previously evaluated board states. If the AI encounters a position it has seen before (even via a different sequence of moves), it retrieves the stored score instead of re-calculating, drastically reducing computation time.
+*   **Move Ordering**: Before searching, valid moves are sorted based on static weights (e.g., checking corners first). This helps Alpha-Beta pruning find "good enough" moves earlier, allowing it to prune more branches and search deeper.
 
 ### Evaluation Function (Heuristics)
 The AI evaluates board states using a weighted combination of three factors, which changes dynamically based on the game phase (Opening, Midgame, Endgame):
@@ -44,7 +46,6 @@ The original AI is kept for comparison and benchmarking purposes.
 
 While the new AI is strong, it can still be improved:
 
-1.  **Transposition Table**: Store evaluated board states to avoid re-calculating the same position reached via different move orders.
-2.  **Opening Book**: Use a database of standard openings to play instantly and perfectly for the first 10-15 moves.
-3.  **Pattern Recognition**: Instead of static weights, recognize specific edge and corner patterns (e.g., "Stoner Trap").
-4.  **MCTS (Monte Carlo Tree Search)**: An alternative to MinMax that can be very effective, especially when combined with neural networks (like AlphaZero).
+1.  **Opening Book**: Use a database of standard openings to play instantly and perfectly for the first 10-15 moves.
+2.  **Pattern Recognition**: Instead of static weights, recognize specific edge and corner patterns (e.g., "Stoner Trap").
+3.  **MCTS (Monte Carlo Tree Search)**: An alternative to MinMax that can be very effective, especially when combined with neural networks (like AlphaZero).
