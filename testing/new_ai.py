@@ -14,67 +14,202 @@ WEIGHTS = [
     [100, -20, 10, 5, 5, 10, -20, 100]
 ]
 
+# Bitboard Constants
+MASK_A = 0xFEFEFEFEFEFEFEFE
+MASK_H = 0x7F7F7F7F7F7F7F7F
+FULL_MASK = 0xFFFFFFFFFFFFFFFF
+
+# Precompute Weight Masks
+WEIGHT_MASKS = {}
+for r in range(8):
+    for c in range(8):
+        w = WEIGHTS[r][c]
+        if w not in WEIGHT_MASKS:
+            WEIGHT_MASKS[w] = 0
+        WEIGHT_MASKS[w] |= (1 << (r * 8 + c))
+
 TRANSPOSITION_TABLE = {}
 
-def get_board_key(board):
-    return tuple(tuple(row) for row in board)
-
-def evaluate_board_improved(board, player):
+def board_to_bitboards(board, player):
+    own = 0
+    opp = 0
     opponent = WHITE if player == BLACK else BLACK
+    for r in range(8):
+        for c in range(8):
+            p = board[r][c]
+            if p == player:
+                own |= (1 << (r * 8 + c))
+            elif p == opponent:
+                opp |= (1 << (r * 8 + c))
+    return own, opp
+
+def get_valid_moves_bitboard(own, opp):
+    empty = ~(own | opp) & FULL_MASK
+    moves = 0
     
+    # East (+1)
+    candidates = opp & ((own & MASK_H) << 1)
+    while candidates:
+        moves |= empty & ((candidates & MASK_H) << 1)
+        candidates = opp & ((candidates & MASK_H) << 1)
+        
+    # West (-1)
+    candidates = opp & ((own & MASK_A) >> 1)
+    while candidates:
+        moves |= empty & ((candidates & MASK_A) >> 1)
+        candidates = opp & ((candidates & MASK_A) >> 1)
+        
+    # South (+8)
+    candidates = opp & ((own) << 8)
+    while candidates:
+        moves |= empty & ((candidates) << 8)
+        candidates = opp & ((candidates) << 8)
+        
+    # North (-8)
+    candidates = opp & ((own) >> 8)
+    while candidates:
+        moves |= empty & ((candidates) >> 8)
+        candidates = opp & ((candidates) >> 8)
+        
+    # SE (+9)
+    candidates = opp & ((own & MASK_H) << 9)
+    while candidates:
+        moves |= empty & ((candidates & MASK_H) << 9)
+        candidates = opp & ((candidates & MASK_H) << 9)
+        
+    # SW (+7)
+    candidates = opp & ((own & MASK_A) << 7)
+    while candidates:
+        moves |= empty & ((candidates & MASK_A) << 7)
+        candidates = opp & ((candidates & MASK_A) << 7)
+        
+    # NE (-7)
+    candidates = opp & ((own & MASK_H) >> 7)
+    while candidates:
+        moves |= empty & ((candidates & MASK_H) >> 7)
+        candidates = opp & ((candidates & MASK_H) >> 7)
+        
+    # NW (-9)
+    candidates = opp & ((own & MASK_A) >> 9)
+    while candidates:
+        moves |= empty & ((candidates & MASK_A) >> 9)
+        candidates = opp & ((candidates & MASK_A) >> 9)
+        
+    return moves
+
+def apply_move_bitboard(own, opp, move_mask):
+    flips = 0
+    
+    # East (+1)
+    mask = (move_mask & MASK_H) << 1
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_H) << 1
+    if mask & own: flips |= potential
+    
+    # West (-1)
+    mask = (move_mask & MASK_A) >> 1
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_A) >> 1
+    if mask & own: flips |= potential
+    
+    # South (+8)
+    mask = (move_mask << 8) & FULL_MASK
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask << 8) & FULL_MASK
+    if mask & own: flips |= potential
+    
+    # North (-8)
+    mask = (move_mask >> 8) & FULL_MASK
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask >> 8) & FULL_MASK
+    if mask & own: flips |= potential
+    
+    # SE (+9)
+    mask = (move_mask & MASK_H) << 9
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_H) << 9
+    if mask & own: flips |= potential
+    
+    # SW (+7)
+    mask = (move_mask & MASK_A) << 7
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_A) << 7
+    if mask & own: flips |= potential
+    
+    # NE (-7)
+    mask = (move_mask & MASK_H) >> 7
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_H) >> 7
+    if mask & own: flips |= potential
+    
+    # NW (-9)
+    mask = (move_mask & MASK_A) >> 9
+    potential = 0
+    while mask & opp:
+        potential |= mask
+        mask = (mask & MASK_A) >> 9
+    if mask & own: flips |= potential
+    
+    return (own | move_mask | flips), (opp & ~flips)
+
+def evaluate_bitboard(own, opp, current_player_is_black):
+    # 1. Positional
     my_score = 0
     op_score = 0
-    
-    # 1. Positional Strategy (Static Weights)
-    for r in range(BOARD_SIZE):
-        for c in range(BOARD_SIZE):
-            if board[r][c] == player:
-                my_score += WEIGHTS[r][c]
-            elif board[r][c] == opponent:
-                op_score += WEIGHTS[r][c]
+    for w, mask in WEIGHT_MASKS.items():
+        my_score += w * (own & mask).bit_count()
+        op_score += w * (opp & mask).bit_count()
     
     positional_score = my_score - op_score
     
-    # 2. Mobility (Number of valid moves)
-    my_moves = len(get_valid_moves(board, player))
-    op_moves = len(get_valid_moves(board, opponent))
+    # 2. Mobility
+    my_moves_mask = get_valid_moves_bitboard(own, opp)
+    op_moves_mask = get_valid_moves_bitboard(opp, own)
+    my_moves_count = my_moves_mask.bit_count()
+    op_moves_count = op_moves_mask.bit_count()
     
-    if my_moves + op_moves != 0:
-        mobility_score = 100 * (my_moves - op_moves) / (my_moves + op_moves)
+    if my_moves_count + op_moves_count != 0:
+        mobility_score = 100 * (my_moves_count - op_moves_count) / (my_moves_count + op_moves_count)
     else:
         mobility_score = 0
         
-    # 3. Coin Parity (Piece count) - More important in endgame
-    black_coins, white_coins = get_score(board)
-    if player == BLACK:
-        my_coins = black_coins
-        op_coins = white_coins
-    else:
-        my_coins = white_coins
-        op_coins = black_coins
-        
+    # 3. Coin Parity
+    my_coins = own.bit_count()
+    op_coins = opp.bit_count()
+    
     if my_coins + op_coins != 0:
         coin_parity_score = 100 * (my_coins - op_coins) / (my_coins + op_coins)
     else:
         coin_parity_score = 0
         
-    # Dynamic weighting based on game phase
-    total_coins = black_coins + white_coins
+    total_coins = my_coins + op_coins
     
-    if total_coins < 20: # Opening
+    if total_coins < 20:
         return positional_score + 2 * mobility_score
-    elif total_coins < 50: # Midgame
+    elif total_coins < 50:
         return positional_score + mobility_score + coin_parity_score
-    else: # Endgame
+    else:
         return positional_score + 5 * coin_parity_score
 
-def minmax_improved(board, depth, maximizing_player, player, alpha, beta, start_time, time_limit):
-    # Check for time limit
+def minmax_bitboard(own, opp, depth, maximizing_player, alpha, beta, start_time, time_limit, player_color):
     if time.time() - start_time > time_limit:
         raise TimeoutError
         
-    board_key = get_board_key(board)
-    state_key = (board_key, player, maximizing_player)
+    state_key = (own, opp, maximizing_player)
     
     alpha_orig = alpha
     beta_orig = beta
@@ -90,87 +225,82 @@ def minmax_improved(board, depth, maximizing_player, player, alpha, beta, start_
                 beta = min(beta, entry['value'])
             if alpha >= beta:
                 return entry['value']
+                
+    if depth == 0:
+        return evaluate_bitboard(own, opp, player_color == BLACK)
         
-    if depth == 0 or is_game_over(board):
-        return evaluate_board_improved(board, player)
+    moves_mask = get_valid_moves_bitboard(own, opp) if maximizing_player else get_valid_moves_bitboard(opp, own)
     
-    opponent = WHITE if player == BLACK else BLACK
-    
+    if moves_mask == 0:
+        opp_moves_mask = get_valid_moves_bitboard(opp, own) if maximizing_player else get_valid_moves_bitboard(own, opp)
+        if opp_moves_mask == 0:
+            return evaluate_bitboard(own, opp, player_color == BLACK)
+        else:
+            return minmax_bitboard(own, opp, depth-1, not maximizing_player, alpha, beta, start_time, time_limit, player_color)
+            
     best_val = float('-inf') if maximizing_player else float('inf')
     
+    move_indices = []
+    temp_moves = moves_mask
+    while temp_moves:
+        lsb = temp_moves & -temp_moves
+        move_indices.append(lsb)
+        temp_moves ^= lsb
+        
+    def get_weight(move_bit):
+        for w, mask in WEIGHT_MASKS.items():
+            if mask & move_bit:
+                return w
+        return 0
+        
+    move_indices.sort(key=get_weight, reverse=True)
+    
     if maximizing_player:
-        valid_moves = get_valid_moves(board, player)
-        if not valid_moves:
-             val = minmax_improved(board, depth-1, False, player, alpha, beta, start_time, time_limit)
-             best_val = val
-             alpha = max(alpha, val)
-        else:
-            # Move Ordering
-            valid_moves.sort(key=lambda m: WEIGHTS[m[0]][m[1]], reverse=True)
-            
-            for move in valid_moves:
-                new_board, _ = apply_move(board, move[0], move[1], player)
-                eval = minmax_improved(new_board, depth-1, False, player, alpha, beta, start_time, time_limit)
-                
-                if eval > best_val:
-                    best_val = eval
-                
-                alpha = max(alpha, eval)
-                if beta <= alpha:
-                    break
+        for move_bit in move_indices:
+            new_own, new_opp = apply_move_bitboard(own, opp, move_bit)
+            eval = minmax_bitboard(new_own, new_opp, depth-1, False, alpha, beta, start_time, time_limit, player_color)
+            best_val = max(best_val, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
     else:
-        valid_moves = get_valid_moves(board, opponent)
-        if not valid_moves:
-            val = minmax_improved(board, depth-1, True, player, alpha, beta, start_time, time_limit)
-            best_val = val
-            beta = min(beta, val)
-        else:
-            # Move Ordering
-            valid_moves.sort(key=lambda m: WEIGHTS[m[0]][m[1]], reverse=True)
-            
-            for move in valid_moves:
-                new_board, _ = apply_move(board, move[0], move[1], opponent)
-                eval = minmax_improved(new_board, depth-1, True, player, alpha, beta, start_time, time_limit)
+        for move_bit in move_indices:
+            new_opp, new_own = apply_move_bitboard(opp, own, move_bit)
+            eval = minmax_bitboard(new_own, new_opp, depth-1, True, alpha, beta, start_time, time_limit, player_color)
+            best_val = min(best_val, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
                 
-                if eval < best_val:
-                    best_val = eval
-                
-                beta = min(beta, eval)
-                if beta <= alpha:
-                    break
-                    
     if best_val <= alpha_orig:
         flag = 'upperbound'
     elif best_val >= beta_orig:
         flag = 'lowerbound'
     else:
         flag = 'exact'
-
+        
     TRANSPOSITION_TABLE[state_key] = {
         'value': best_val,
         'depth': depth,
         'flag': flag
     }
-    
     return best_val
 
 def get_best_move(board, player, time_limit=2.0):
-    best_move = None
+    own, opp = board_to_bitboards(board, player)
     
     # Endgame Solver Check
-    empty_squares = sum(row.count(EMPTY) for row in board)
-    if empty_squares <= 10:
-        depth = empty_squares # Search to the end
-        # print(f"Endgame solver activated (Depth {depth})")
+    empty_count = (~(own | opp) & FULL_MASK).bit_count()
+    if empty_count <= 12:
+        depth = empty_count
         try:
-            return get_best_move_fixed_depth(board, player, depth, time_limit * 5) # Give more time for endgame
+            return get_best_move_fixed_depth_bitboard(own, opp, depth, time_limit * 5, player)
         except TimeoutError:
-            pass # Fallback to iterative deepening if endgame solve takes too long
+            pass
             
-    # Iterative Deepening
     start_time = time.time()
     depth = 1
-    max_depth = 64 # Cap the depth to avoid infinite loops if time limit is loose
+    max_depth = 64
     
     current_best_move = None
     
@@ -181,8 +311,7 @@ def get_best_move(board, player, time_limit=2.0):
             if depth > max_depth:
                 break
                 
-            # print(f"Searching depth {depth}...")
-            move = get_best_move_fixed_depth(board, player, depth, time_limit, start_time)
+            move = get_best_move_fixed_depth_bitboard(own, opp, depth, time_limit, player, start_time)
             if move:
                 current_best_move = move
                 
@@ -193,7 +322,7 @@ def get_best_move(board, player, time_limit=2.0):
         
     return current_best_move
 
-def get_best_move_fixed_depth(board, player, depth, time_limit, start_time=None):
+def get_best_move_fixed_depth_bitboard(own, opp, depth, time_limit, player, start_time=None):
     if start_time is None:
         start_time = time.time()
         
@@ -202,21 +331,34 @@ def get_best_move_fixed_depth(board, player, depth, time_limit, start_time=None)
     alpha = float('-inf')
     beta = float('inf')
     
-    valid_moves = get_valid_moves(board, player)
-    if not valid_moves:
+    moves_mask = get_valid_moves_bitboard(own, opp)
+    if moves_mask == 0:
         return None
         
-    # Simple move ordering: prioritize corners
-    # corners = [(0, 0), (0, BOARD_SIZE-1), (BOARD_SIZE-1, 0), (BOARD_SIZE-1, BOARD_SIZE-1)]
-    # valid_moves.sort(key=lambda m: m in corners, reverse=True)
-    valid_moves.sort(key=lambda m: WEIGHTS[m[0]][m[1]], reverse=True)
+    move_indices = []
+    temp_moves = moves_mask
+    while temp_moves:
+        lsb = temp_moves & -temp_moves
+        move_indices.append(lsb)
+        temp_moves ^= lsb
         
-    for move in valid_moves:
-        new_board, _ = apply_move(board, move[0], move[1], player)
-        eval = minmax_improved(new_board, depth-1, False, player, alpha, beta, start_time, time_limit)
+    def get_weight(move_bit):
+        for w, mask in WEIGHT_MASKS.items():
+            if mask & move_bit:
+                return w
+        return 0
+        
+    move_indices.sort(key=get_weight, reverse=True)
+        
+    for move_bit in move_indices:
+        new_own, new_opp = apply_move_bitboard(own, opp, move_bit)
+        eval = minmax_bitboard(new_own, new_opp, depth-1, False, alpha, beta, start_time, time_limit, player)
+        
         if eval > max_eval:
             max_eval = eval
-            best_move = move
+            idx = move_bit.bit_length() - 1
+            best_move = (idx // 8, idx % 8)
+            
         alpha = max(alpha, eval)
             
     return best_move

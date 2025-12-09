@@ -7,10 +7,11 @@ This document explains the AI implementations for the Console Othello game.
 The default AI for the game is now a significantly more advanced agent that uses several techniques to play at a high level.
 
 ### Core Algorithm
+*   **Bitboard Representation**: The board state is converted into two 64-bit integers (one for each player). This allows move generation, validation, and application to be performed using extremely fast bitwise operations (AND, OR, XOR, Shifts) instead of slow 2D array iterations. This is the primary driver of the AI's speed.
 *   **MinMax with Alpha-Beta Pruning**: The foundation is still the standard MinMax algorithm optimized with Alpha-Beta pruning to cut off irrelevant branches of the search tree.
-*   **Iterative Deepening**: Instead of searching to a fixed depth, the AI searches to depth 1, then depth 2, and so on, until a time limit (2 seconds) is reached. This ensures the AI always has a valid move ready and uses its time efficiently.
-*   **Transposition Table**: A hash map stores previously evaluated board states. If the AI encounters a position it has seen before (even via a different sequence of moves), it retrieves the stored score instead of re-calculating, drastically reducing computation time.
-*   **Move Ordering**: Before searching, valid moves are sorted based on static weights (e.g., checking corners first). This helps Alpha-Beta pruning find "good enough" moves earlier, allowing it to prune more branches and search deeper.
+*   **Iterative Deepening**: Instead of searching to a fixed depth, the AI searches to depth 1, then depth 2, and so on, until a time limit (2 seconds) is reached. With bitboards, the AI can search significantly deeper in the same amount of time.
+*   **Transposition Table**: A hash map stores previously evaluated board states. If the AI encounters a position it has seen before (even via a different sequence of moves), it retrieves the stored score instead of re-calculating.
+*   **Move Ordering**: Before searching, valid moves are sorted based on static weights (e.g., checking corners first). This helps Alpha-Beta pruning find "good enough" moves earlier.
 
 ### Evaluation Function (Heuristics)
 The AI evaluates board states using a weighted combination of three factors, which changes dynamically based on the game phase (Opening, Midgame, Endgame):
