@@ -7,7 +7,7 @@ This folder contains tools to benchmark and analyze the performance of different
 *   `benchmark.py`: The main script to run simulations.
 *   `analysis.ipynb`: A Jupyter Notebook to visualize and analyze the results.
 *   `old_ai.py`: A copy of the legacy AI (08-12-2025).
-*   `new_ai.py`: A copy of the improved AI (Iterative Deepening, Advanced Heuristics, Bitboard Optimization).
+*   `new_ai.py`: A copy of the improved AI (Iterative Deepening, Advanced Heuristics, Bitboard Optimization, Opening Book).
 *   `benchmark_games.csv`: (Generated) Contains summary data for each simulated game.
 *   `benchmark_moves.csv`: (Generated) Contains detailed data for every move in every game.
 

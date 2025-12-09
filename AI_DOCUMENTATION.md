@@ -7,6 +7,7 @@ This document explains the AI implementations for the Console Othello game.
 The default AI for the game is now a significantly more advanced agent that uses several techniques to play at a high level.
 
 ### Core Algorithm
+*   **Opening Book**: The AI uses a lookup table for the first few moves of the game. This allows it to play standard openings instantly without searching, saving time and ensuring a strong start.
 *   **Bitboard Representation**: The board state is converted into two 64-bit integers (one for each player). This allows move generation, validation, and application to be performed using extremely fast bitwise operations (AND, OR, XOR, Shifts) instead of slow 2D array iterations. This is the primary driver of the AI's speed.
 *   **MinMax with Alpha-Beta Pruning**: The foundation is still the standard MinMax algorithm optimized with Alpha-Beta pruning to cut off irrelevant branches of the search tree.
 *   **Iterative Deepening**: Instead of searching to a fixed depth, the AI searches to depth 1, then depth 2, and so on, until a time limit (2 seconds) is reached. With bitboards, the AI can search significantly deeper in the same amount of time.
@@ -47,6 +48,5 @@ The original AI is kept for comparison and benchmarking purposes.
 
 While the new AI is strong, it can still be improved:
 
-1.  **Opening Book**: Use a database of standard openings to play instantly and perfectly for the first 10-15 moves.
-2.  **Pattern Recognition**: Instead of static weights, recognize specific edge and corner patterns (e.g., "Stoner Trap").
-3.  **MCTS (Monte Carlo Tree Search)**: An alternative to MinMax that can be very effective, especially when combined with neural networks (like AlphaZero).
+1.  **Pattern Recognition**: Instead of static weights, recognize specific edge and corner patterns (e.g., "Stoner Trap").
+2.  **MCTS (Monte Carlo Tree Search)**: An alternative to MinMax that can be very effective, especially when combined with neural networks (like AlphaZero).

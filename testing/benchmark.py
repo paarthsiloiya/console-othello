@@ -50,9 +50,9 @@ def play_game(game_id, phase):
             player_type = white_player
             
         if player_type == "Old AI":
-            move = old_ai.get_best_move(board, current_player)
+            move = old_ai.get_best_move(board, current_player, time_limit=1)
         else:
-            move = new_ai.get_best_move(board, current_player)
+            move = new_ai.get_best_move(board, current_player, time_limit=1)
             
         move_end = time.time()
         move_duration = move_end - move_start

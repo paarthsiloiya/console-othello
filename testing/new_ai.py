@@ -1,6 +1,7 @@
 import time
 from constants import BLACK, WHITE, BOARD_SIZE, EMPTY
 from game_logic import get_valid_moves, apply_move, is_game_over, get_score
+from opening_book import get_opening_move
 
 # Static weights for the board
 WEIGHTS = [
@@ -287,6 +288,11 @@ def minmax_bitboard(own, opp, depth, maximizing_player, alpha, beta, start_time,
     return best_val
 
 def get_best_move(board, player, time_limit=2.0):
+    # Check Opening Book
+    opening_move = get_opening_move(board, player)
+    if opening_move:
+        return opening_move
+
     own, opp = board_to_bitboards(board, player)
     
     # Endgame Solver Check
