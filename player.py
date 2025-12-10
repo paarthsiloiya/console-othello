@@ -2,6 +2,16 @@ from constants import BOARD_SIZE
 from game_logic import is_valid_move
 
 def get_human_move(board, player):
+    """
+    Prompts the human player for a move and validates it.
+
+    Args:
+        board (list): The current game board.
+        player (str): The color of the current player.
+
+    Returns:
+        tuple: The coordinates (row, col) of the valid move entered by the user.
+    """
     while True:
         try:
             move_str = input(f"Enter move (e.g. C4): ").strip().upper()

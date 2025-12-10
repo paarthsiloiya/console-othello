@@ -32,6 +32,17 @@ for r in range(8):
 TRANSPOSITION_TABLE = {}
 
 def board_to_bitboards(board, player):
+    """
+    Converts the 2D board list into two 64-bit integers (bitboards).
+
+    Args:
+        board (list): The 2D list representation of the board.
+        player (str): The current player's color.
+
+    Returns:
+        tuple: A tuple (own, opp) where 'own' is the bitboard for the current player
+               and 'opp' is the bitboard for the opponent.
+    """
     own = 0
     opp = 0
     opponent = WHITE if player == BLACK else BLACK
@@ -45,6 +56,16 @@ def board_to_bitboards(board, player):
     return own, opp
 
 def get_valid_moves_bitboard(own, opp):
+    """
+    Calculates valid moves using bitwise operations.
+
+    Args:
+        own (int): The bitboard of the current player's pieces.
+        opp (int): The bitboard of the opponent's pieces.
+
+    Returns:
+        int: A bitboard where set bits represent valid move positions.
+    """
     empty = ~(own | opp) & FULL_MASK
     moves = 0
     
@@ -99,6 +120,17 @@ def get_valid_moves_bitboard(own, opp):
     return moves
 
 def apply_move_bitboard(own, opp, move_mask):
+    """
+    Applies a move on the bitboards and flips captured pieces.
+
+    Args:
+        own (int): The bitboard of the current player's pieces.
+        opp (int): The bitboard of the opponent's pieces.
+        move_mask (int): A bitboard with a single bit set representing the move.
+
+    Returns:
+        tuple: A tuple (new_own, new_opp) representing the updated board state.
+    """
     flips = 0
     
     # East (+1)
@@ -168,6 +200,17 @@ def apply_move_bitboard(own, opp, move_mask):
     return (own | move_mask | flips), (opp & ~flips)
 
 def evaluate_bitboard(own, opp, current_player_is_black):
+    """
+    Evaluates the board state using heuristics (Positional, Mobility, Coin Parity).
+
+    Args:
+        own (int): The bitboard of the current player's pieces.
+        opp (int): The bitboard of the opponent's pieces.
+        current_player_is_black (bool): True if the current player is Black.
+
+    Returns:
+        float: The heuristic score of the board state.
+    """
     # 1. Positional
     my_score = 0
     op_score = 0
@@ -207,6 +250,23 @@ def evaluate_bitboard(own, opp, current_player_is_black):
         return positional_score + 5 * coin_parity_score
 
 def minmax_bitboard(own, opp, depth, maximizing_player, alpha, beta, start_time, time_limit, player_color):
+    """
+    The MinMax algorithm with Alpha-Beta pruning using bitboards.
+
+    Args:
+        own (int): Bitboard for the current player.
+        opp (int): Bitboard for the opponent.
+        depth (int): The current depth of the search.
+        maximizing_player (bool): True if the current node is a maximizing node.
+        alpha (float): The alpha value for pruning.
+        beta (float): The beta value for pruning.
+        start_time (float): The time when the search started.
+        time_limit (float): The maximum allowed time for the search.
+        player_color (str): The color of the player (BLACK or WHITE).
+
+    Returns:
+        float: The best score found for the current board state.
+    """
     if time.time() - start_time > time_limit:
         raise TimeoutError
         
@@ -288,6 +348,17 @@ def minmax_bitboard(own, opp, depth, maximizing_player, alpha, beta, start_time,
     return best_val
 
 def get_best_move(board, player, time_limit=2.0):
+    """
+    Determines the best move for the given player using Iterative Deepening MinMax.
+
+    Args:
+        board (list): The current game board.
+        player (str): The color of the player.
+        time_limit (float): The maximum time allowed for calculation (default 2.0s).
+
+    Returns:
+        tuple: The coordinates (row, col) of the best move, or None if no move is possible.
+    """
     # Check Opening Book
     opening_move = get_opening_move(board, player)
     if opening_move:
@@ -329,6 +400,20 @@ def get_best_move(board, player, time_limit=2.0):
     return current_best_move
 
 def get_best_move_fixed_depth_bitboard(own, opp, depth, time_limit, player, start_time=None):
+    """
+    Helper function to find the best move at a fixed depth using bitboards.
+
+    Args:
+        own (int): Bitboard for the current player.
+        opp (int): Bitboard for the opponent.
+        depth (int): The depth to search.
+        time_limit (float): The time limit.
+        player (str): The player color.
+        start_time (float, optional): The start time of the search.
+
+    Returns:
+        tuple: The coordinates (row, col) of the best move.
+    """
     if start_time is None:
         start_time = time.time()
         

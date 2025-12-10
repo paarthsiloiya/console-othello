@@ -1,12 +1,17 @@
 import time
-from colorama import Fore, Style
-from constants import BLACK, WHITE, EMPTY
+from constants import BLACK, WHITE, EMPTY, BLACK_COLOR, WHITE_COLOR, RESET_COLOR
 from game_logic import create_board, is_game_over, get_winner, get_score, has_valid_move, apply_move
 from ui import print_board, print_score, print_message, clear_screen, print_welcome, animate_flip
 from player import get_human_move
 from ai import get_best_move
 
 def main():
+    """
+    The main entry point for the Console Othello game.
+    
+    Handles the game loop, player turns, and game state updates.
+    Supports Player vs Player and Player vs Computer modes.
+    """
     print_welcome()
     print("1. Player vs Player")
     print("2. Player vs Computer")
@@ -33,9 +38,9 @@ def main():
         
         if not has_valid_move(board, current_player):
             if mode == 1:
-                p_name = f"Player 1 ({Fore.RED}Black{Style.RESET_ALL})" if current_player == BLACK else f"Player 2 ({Fore.CYAN}White{Style.RESET_ALL})"
+                p_name = f"Player 1 ({BLACK_COLOR}Black{RESET_COLOR})" if current_player == BLACK else f"Player 2 ({WHITE_COLOR}White{RESET_COLOR})"
             else:
-                p_name = f"Player ({Fore.RED}Black{Style.RESET_ALL})" if current_player == BLACK else f"Computer ({Fore.CYAN}White{Style.RESET_ALL})"
+                p_name = f"Player ({BLACK_COLOR}Black{RESET_COLOR})" if current_player == BLACK else f"Computer ({WHITE_COLOR}White{RESET_COLOR})"
             
             print_message(f"{p_name} has no valid moves. Skipping turn.")
             time.sleep(2)
@@ -44,14 +49,14 @@ def main():
             
         if mode == 1:
             if current_player == BLACK:
-                msg = f"Player 1's ({Fore.RED}Black{Style.RESET_ALL}) turn"
+                msg = f"Player 1's ({BLACK_COLOR}Black{RESET_COLOR}) turn"
             else:
-                msg = f"Player 2's ({Fore.CYAN}White{Style.RESET_ALL}) turn"
+                msg = f"Player 2's ({WHITE_COLOR}White{RESET_COLOR}) turn"
         else:
             if current_player == BLACK:
-                msg = f"Player's ({Fore.RED}Black{Style.RESET_ALL}) turn"
+                msg = f"Player's ({BLACK_COLOR}Black{RESET_COLOR}) turn"
             else:
-                msg = f"Computer's ({Fore.CYAN}White{Style.RESET_ALL}) turn"
+                msg = f"Computer's ({WHITE_COLOR}White{RESET_COLOR}) turn"
         
         print_message(msg)
         

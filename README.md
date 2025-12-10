@@ -11,11 +11,36 @@ A clean, console-based implementation of the classic board game Othello (also kn
     *   Uses Unicode box-drawing characters for a crisp board display.
     *   Colored pieces (Red for Black, Cyan for White) for easy distinction.
     *   Clear screen updates for a smooth experience.
-*   **AI**:
-    *   **Advanced Strategy**: Uses a sophisticated evaluation function considering board position, mobility, and coin parity.
-    *   **Iterative Deepening**: Searches progressively deeper within a time limit to find the best move.
-    *   **Endgame Solver**: Calculates the perfect sequence of moves when near the end of the game.
-    *   **Alpha-Beta Pruning**: Optimizes the search process.
+*   **Advanced AI**:
+    *   **Bitboard Representation**: Utilizes 64-bit integers for board state, enabling extremely fast bitwise operations for move generation and validation.
+    *   **Opening Book**: Includes a database of standard opening moves to play perfectly in the early game.
+    *   **MinMax with Alpha-Beta Pruning**: Efficiently searches the game tree to find optimal moves.
+    *   **Iterative Deepening**: Searches progressively deeper within a time limit to ensure the best possible move is found within the allocated time.
+    *   **Heuristic Evaluation**: Evaluates board states based on positional weight maps, mobility (number of valid moves), and coin parity.
+    *   **Endgame Solver**: Switches to an exact search when few empty squares remain to calculate the perfect sequence of moves.
+
+## Documentation
+
+The project code is fully documented using Google-style docstrings. You can view the hosted documentation here:
+
+**[Console Othello Documentation](https://paarthsiloiya.github.io/console-othello/)**
+
+You can also generate the documentation locally using Sphinx.
+
+The documentation is produced by AI.
+
+### Generating Documentation
+
+1.  Install Sphinx and the theme:
+    ```bash
+    pip install sphinx shibuya
+    ```
+2.  Navigate to the `docs` directory (create it if it doesn't exist and run `sphinx-quickstart`).
+3.  Run the build command:
+    ```bash
+    make html
+    ```
+4.  Open `docs/_build/html/index.html` in your browser.
 
 ## Requirements
 
@@ -64,8 +89,8 @@ A clean, console-based implementation of the classic board game Othello (also kn
 
 *   `main.py`: Entry point of the game.
 *   `game_logic.py`: Core game rules and mechanics.
-*   `ai_improved.py`: Advanced AI implementation (Iterative Deepening, Heuristics).
-*   `ai.py`: Legacy AI implementation (Basic MinMax).
+*   `ai.py`: Advanced AI implementation (Bitboards, MinMax, Opening Book).
+*   `opening_book.py`: Opening book logic and data.
 *   `ui.py`: User interface and display logic.
 *   `player.py`: Input handling for human players.
 *   `constants.py`: Global constants and configuration.

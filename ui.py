@@ -7,39 +7,63 @@ from constants import *
 init(autoreset=True)
 
 def clear_screen():
+    """
+    Clears the console screen.
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def print_board(board):
+    """
+    Prints the current game board to the console with formatting and colors.
+
+    Args:
+        board (list): The 2D list representation of the board.
+    """
     header = "    " + "   ".join([chr(ord('A') + i) for i in range(BOARD_SIZE)])
     print(header)
     
-    top_border = "  " + TOP_LEFT + (HORIZONTAL * 3 + T_DOWN) * (BOARD_SIZE - 1) + HORIZONTAL * 3 + TOP_RIGHT
+    top_border = "  " + TOP_LEFT + (BORDER_HORIZONTAL * 3 + T_DOWN) * (BOARD_SIZE - 1) + BORDER_HORIZONTAL * 3 + TOP_RIGHT
     print(top_border)
     
     for r in range(BOARD_SIZE):
-        line = f"{r+1} {VERTICAL}"
+        line = f"{r+1} {BORDER_VERTICAL}"
         for c in range(BOARD_SIZE):
             piece = board[r][c]
             if piece == BLACK:
-                symbol = Fore.RED + PIECE + Style.RESET_ALL
+                symbol = BLACK_COLOR + PIECE + RESET_COLOR
             elif piece == WHITE:
-                symbol = Fore.CYAN + PIECE + Style.RESET_ALL
+                symbol = WHITE_COLOR + PIECE + RESET_COLOR
             else:
                 symbol = " "
-            line += f" {symbol} {VERTICAL}"
+            
+            line += f" {symbol} "
+            if c < BOARD_SIZE - 1:
+                line += INNER_VERTICAL
+            else:
+                line += BORDER_VERTICAL
         print(line)
         
         if r < BOARD_SIZE - 1:
-            mid_border = "  " + T_RIGHT + (HORIZONTAL * 3 + CROSS) * (BOARD_SIZE - 1) + HORIZONTAL * 3 + T_LEFT
+            mid_border = "  " + T_RIGHT + (INNER_HORIZONTAL * 3 + CROSS) * (BOARD_SIZE - 1) + INNER_HORIZONTAL * 3 + T_LEFT
             print(mid_border)
             
-    bottom_border = "  " + BOTTOM_LEFT + (HORIZONTAL * 3 + T_UP) * (BOARD_SIZE - 1) + HORIZONTAL * 3 + BOTTOM_RIGHT
+    bottom_border = "  " + BOTTOM_LEFT + (BORDER_HORIZONTAL * 3 + T_UP) * (BOARD_SIZE - 1) + BORDER_HORIZONTAL * 3 + BOTTOM_RIGHT
     print(bottom_border)
 
 def print_score(black_score, white_score):
-    print(f"{Fore.RED}Black: {black_score}{Style.RESET_ALL}  {Fore.CYAN}White: {white_score}{Style.RESET_ALL}")
+    """
+    Prints the current score of the game.
+
+    Args:
+        black_score (int): The score of the Black player.
+        white_score (int): The score of the White player.
+    """
+    print(f"{BLACK_COLOR}Black: {black_score}{RESET_COLOR}  {WHITE_COLOR}White: {white_score}{RESET_COLOR}")
 
 def print_welcome():
+    """
+    Prints the welcome message and game rules.
+    """
     clear_screen()
     print(Fore.YELLOW + Style.BRIGHT + r"""
    ____  _   _          _ _       
@@ -49,28 +73,43 @@ def print_welcome():
  | |__| | |_| | | |  __/ | | (_) |
   \____/ \__|_| |_|\___|_|_|\___/ 
                                   
-""" + Style.RESET_ALL)
-    print(f"{Style.BRIGHT}Welcome to Console Othello!{Style.RESET_ALL}")
+""" + RESET_COLOR)
+    print(f"{Style.BRIGHT}Welcome to Console Othello!{RESET_COLOR}")
     print("Rules: Capture opponent's pieces by trapping them between yours.")
-    print(f"Player 1 ({Fore.RED}{PIECE}{Style.RESET_ALL}) vs Player 2 ({Fore.CYAN}{PIECE}{Style.RESET_ALL})")
+    print(f"Player 1 ({BLACK_COLOR}{PIECE}{RESET_COLOR}) vs Player 2 ({WHITE_COLOR}{PIECE}{RESET_COLOR})")
     print()
 
 def print_message(msg):
+    """
+    Prints a message to the console.
+
+    Args:
+        msg (str): The message to print.
+    """
     print(msg)
 
 def animate_flip(flipped_groups, player, placed_pos=None):
+    """
+    Animates the flipping of pieces on the board.
+
+    Args:
+        flipped_groups (list): A list of lists, where each inner list contains
+                               coordinates (r, c) of pieces to be flipped in a direction.
+        player (str): The color of the player who made the move.
+        placed_pos (tuple, optional): The coordinates (r, c) of the piece just placed.
+    """
     bext.hide_cursor()
     if placed_pos:
         r, c = placed_pos
         x = 4 + 4 * c
         y = 2 + 2 * r
         if player == BLACK:
-            color = Fore.RED
+            color = BLACK_COLOR
         else:
-            color = Fore.CYAN
+            color = WHITE_COLOR
         try:
             bext.goto(x, y)
-            print(color + PIECE + Style.RESET_ALL, end='', flush=True)
+            print(color + PIECE + RESET_COLOR, end='', flush=True)
         except:
             pass
 
@@ -85,9 +124,9 @@ def animate_flip(flipped_groups, player, placed_pos=None):
     final_char = PIECE
     
     if player == BLACK:
-        final_color = Fore.RED
+        final_color = BLACK_COLOR
     else:
-        final_color = Fore.CYAN
+        final_color = WHITE_COLOR
         
     middle_color = final_color
     
