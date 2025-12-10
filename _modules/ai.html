@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ai - Console Othello 1.0.0 documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../_static/shibuya.css?v=14737038" />
+    <link media="print" rel="stylesheet" type="text/css" href="../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="ai"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../index.html">
+      
+      
+      <strong>Console Othello</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Console Othello Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../game_logic.html">game_logic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ai.html">ai module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../opening_book.html">opening_book module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui.html">ui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../player.html">player module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../constants.html">constants module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../index.html"><span itemprop="name">Console Othello</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">Module code</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">ai</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <h1>Source code for ai</h1><div class="highlight"><pre>
+<span></span><span data-line="1"><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</span><span data-line="2"><span class="kn">from</span><span class="w"> </span><span class="nn">constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">BOARD_SIZE</span><span class="p">,</span> <span class="n">EMPTY</span>
+</span><span data-line="3"><span class="kn">from</span><span class="w"> </span><span class="nn">game_logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_valid_moves</span><span class="p">,</span> <span class="n">apply_move</span><span class="p">,</span> <span class="n">is_game_over</span><span class="p">,</span> <span class="n">get_score</span>
+</span><span data-line="4"><span class="kn">from</span><span class="w"> </span><span class="nn">opening_book</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_opening_move</span>
+</span><span data-line="5">
+</span><span data-line="6"><span class="c1"># Static weights for the board</span>
+</span><span data-line="7"><span class="n">WEIGHTS</span> <span class="o">=</span> <span class="p">[</span>
+</span><span data-line="8">    <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+</span><span data-line="9">    <span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">],</span>
+</span><span data-line="10">    <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+</span><span data-line="11">    <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+</span><span data-line="12">    <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+</span><span data-line="13">    <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+</span><span data-line="14">    <span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">],</span>
+</span><span data-line="15">    <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+</span><span data-line="16"><span class="p">]</span>
+</span><span data-line="17">
+</span><span data-line="18"><span class="c1"># Bitboard Constants</span>
+</span><span data-line="19"><span class="n">MASK_A</span> <span class="o">=</span> <span class="mh">0xFEFEFEFEFEFEFEFE</span>
+</span><span data-line="20"><span class="n">MASK_H</span> <span class="o">=</span> <span class="mh">0x7F7F7F7F7F7F7F7F</span>
+</span><span data-line="21"><span class="n">FULL_MASK</span> <span class="o">=</span> <span class="mh">0xFFFFFFFFFFFFFFFF</span>
+</span><span data-line="22">
+</span><span data-line="23"><span class="c1"># Precompute Weight Masks</span>
+</span><span data-line="24"><span class="n">WEIGHT_MASKS</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="25"><span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+</span><span data-line="26">    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+</span><span data-line="27">        <span class="n">w</span> <span class="o">=</span> <span class="n">WEIGHTS</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
+</span><span data-line="28">        <span class="k">if</span> <span class="n">w</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">WEIGHT_MASKS</span><span class="p">:</span>
+</span><span data-line="29">            <span class="n">WEIGHT_MASKS</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="30">        <span class="n">WEIGHT_MASKS</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+</span><span data-line="31">
+</span><span data-line="32"><span class="n">TRANSPOSITION_TABLE</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span data-line="33">
+<div class="viewcode-block" id="board_to_bitboards">
+<a class="viewcode-back" href="../ai.html#ai.board_to_bitboards">[docs]</a>
+</span><span data-line="34"><span class="k">def</span><span class="w"> </span><span class="nf">board_to_bitboards</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+</span><span data-line="35"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="36"><span class="sd">    Converts the 2D board list into two 64-bit integers (bitboards).</span>
+</span><span data-line="37">
+</span><span data-line="38"><span class="sd">    Args:</span>
+</span><span data-line="39"><span class="sd">        board (list): The 2D list representation of the board.</span>
+</span><span data-line="40"><span class="sd">        player (str): The current player&#39;s color.</span>
+</span><span data-line="41">
+</span><span data-line="42"><span class="sd">    Returns:</span>
+</span><span data-line="43"><span class="sd">        tuple: A tuple (own, opp) where &#39;own&#39; is the bitboard for the current player</span>
+</span><span data-line="44"><span class="sd">               and &#39;opp&#39; is the bitboard for the opponent.</span>
+</span><span data-line="45"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="46">    <span class="n">own</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="47">    <span class="n">opp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="48">    <span class="n">opponent</span> <span class="o">=</span> <span class="n">WHITE</span> <span class="k">if</span> <span class="n">player</span> <span class="o">==</span> <span class="n">BLACK</span> <span class="k">else</span> <span class="n">BLACK</span>
+</span><span data-line="49">    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+</span><span data-line="50">        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+</span><span data-line="51">            <span class="n">p</span> <span class="o">=</span> <span class="n">board</span><span class="p">[</span><span class="n">r</span><span class="p">][</span><span class="n">c</span><span class="p">]</span>
+</span><span data-line="52">            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="n">player</span><span class="p">:</span>
+</span><span data-line="53">                <span class="n">own</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+</span><span data-line="54">            <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="n">opponent</span><span class="p">:</span>
+</span><span data-line="55">                <span class="n">opp</span> <span class="o">|=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">c</span><span class="p">))</span>
+</span><span data-line="56">    <span class="k">return</span> <span class="n">own</span><span class="p">,</span> <span class="n">opp</span></div>
+
+</span><span data-line="57">
+<div class="viewcode-block" id="get_valid_moves_bitboard">
+<a class="viewcode-back" href="../ai.html#ai.get_valid_moves_bitboard">[docs]</a>
+</span><span data-line="58"><span class="k">def</span><span class="w"> </span><span class="nf">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">):</span>
+</span><span data-line="59"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="60"><span class="sd">    Calculates valid moves using bitwise operations.</span>
+</span><span data-line="61">
+</span><span data-line="62"><span class="sd">    Args:</span>
+</span><span data-line="63"><span class="sd">        own (int): The bitboard of the current player&#39;s pieces.</span>
+</span><span data-line="64"><span class="sd">        opp (int): The bitboard of the opponent&#39;s pieces.</span>
+</span><span data-line="65">
+</span><span data-line="66"><span class="sd">    Returns:</span>
+</span><span data-line="67"><span class="sd">        int: A bitboard where set bits represent valid move positions.</span>
+</span><span data-line="68"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="69">    <span class="n">empty</span> <span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">own</span> <span class="o">|</span> <span class="n">opp</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span>
+</span><span data-line="70">    <span class="n">moves</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="71">    
+</span><span data-line="72">    <span class="c1"># East (+1)</span>
+</span><span data-line="73">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="74">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="75">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="76">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="77">        
+</span><span data-line="78">    <span class="c1"># West (-1)</span>
+</span><span data-line="79">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="80">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="81">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="82">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span data-line="83">        
+</span><span data-line="84">    <span class="c1"># South (+8)</span>
+</span><span data-line="85">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="86">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="87">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="88">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="89">        
+</span><span data-line="90">    <span class="c1"># North (-8)</span>
+</span><span data-line="91">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="92">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="93">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="94">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="95">        
+</span><span data-line="96">    <span class="c1"># SE (+9)</span>
+</span><span data-line="97">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="98">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="99">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="100">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="101">        
+</span><span data-line="102">    <span class="c1"># SW (+7)</span>
+</span><span data-line="103">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="104">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="105">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="106">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="107">        
+</span><span data-line="108">    <span class="c1"># NE (-7)</span>
+</span><span data-line="109">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="110">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="111">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="112">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">)</span>
+</span><span data-line="113">        
+</span><span data-line="114">    <span class="c1"># NW (-9)</span>
+</span><span data-line="115">    <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="116">    <span class="k">while</span> <span class="n">candidates</span><span class="p">:</span>
+</span><span data-line="117">        <span class="n">moves</span> <span class="o">|=</span> <span class="n">empty</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="118">        <span class="n">candidates</span> <span class="o">=</span> <span class="n">opp</span> <span class="o">&amp;</span> <span class="p">((</span><span class="n">candidates</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span><span class="p">)</span>
+</span><span data-line="119">        
+</span><span data-line="120">    <span class="k">return</span> <span class="n">moves</span></div>
+
+</span><span data-line="121">
+<div class="viewcode-block" id="apply_move_bitboard">
+<a class="viewcode-back" href="../ai.html#ai.apply_move_bitboard">[docs]</a>
+</span><span data-line="122"><span class="k">def</span><span class="w"> </span><span class="nf">apply_move_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">move_mask</span><span class="p">):</span>
+</span><span data-line="123"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="124"><span class="sd">    Applies a move on the bitboards and flips captured pieces.</span>
+</span><span data-line="125">
+</span><span data-line="126"><span class="sd">    Args:</span>
+</span><span data-line="127"><span class="sd">        own (int): The bitboard of the current player&#39;s pieces.</span>
+</span><span data-line="128"><span class="sd">        opp (int): The bitboard of the opponent&#39;s pieces.</span>
+</span><span data-line="129"><span class="sd">        move_mask (int): A bitboard with a single bit set representing the move.</span>
+</span><span data-line="130">
+</span><span data-line="131"><span class="sd">    Returns:</span>
+</span><span data-line="132"><span class="sd">        tuple: A tuple (new_own, new_opp) representing the updated board state.</span>
+</span><span data-line="133"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="134">    <span class="n">flips</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="135">    
+</span><span data-line="136">    <span class="c1"># East (+1)</span>
+</span><span data-line="137">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+</span><span data-line="138">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="139">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="140">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="141">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+</span><span data-line="142">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="143">    
+</span><span data-line="144">    <span class="c1"># West (-1)</span>
+</span><span data-line="145">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+</span><span data-line="146">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="147">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="148">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="149">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+</span><span data-line="150">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="151">    
+</span><span data-line="152">    <span class="c1"># South (+8)</span>
+</span><span data-line="153">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span>
+</span><span data-line="154">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="155">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="156">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="157">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span>
+</span><span data-line="158">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="159">    
+</span><span data-line="160">    <span class="c1"># North (-8)</span>
+</span><span data-line="161">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span>
+</span><span data-line="162">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="163">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="164">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="165">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span>
+</span><span data-line="166">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="167">    
+</span><span data-line="168">    <span class="c1"># SE (+9)</span>
+</span><span data-line="169">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+</span><span data-line="170">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="171">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="172">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="173">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+</span><span data-line="174">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="175">    
+</span><span data-line="176">    <span class="c1"># SW (+7)</span>
+</span><span data-line="177">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+</span><span data-line="178">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="179">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="180">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="181">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+</span><span data-line="182">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="183">    
+</span><span data-line="184">    <span class="c1"># NE (-7)</span>
+</span><span data-line="185">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span>
+</span><span data-line="186">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="187">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="188">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="189">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_H</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span>
+</span><span data-line="190">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="191">    
+</span><span data-line="192">    <span class="c1"># NW (-9)</span>
+</span><span data-line="193">    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span>
+</span><span data-line="194">    <span class="n">potential</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="195">    <span class="k">while</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">opp</span><span class="p">:</span>
+</span><span data-line="196">        <span class="n">potential</span> <span class="o">|=</span> <span class="n">mask</span>
+</span><span data-line="197">        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">MASK_A</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">9</span>
+</span><span data-line="198">    <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">own</span><span class="p">:</span> <span class="n">flips</span> <span class="o">|=</span> <span class="n">potential</span>
+</span><span data-line="199">    
+</span><span data-line="200">    <span class="k">return</span> <span class="p">(</span><span class="n">own</span> <span class="o">|</span> <span class="n">move_mask</span> <span class="o">|</span> <span class="n">flips</span><span class="p">),</span> <span class="p">(</span><span class="n">opp</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">flips</span><span class="p">)</span></div>
+
+</span><span data-line="201">
+<div class="viewcode-block" id="evaluate_bitboard">
+<a class="viewcode-back" href="../ai.html#ai.evaluate_bitboard">[docs]</a>
+</span><span data-line="202"><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">current_player_is_black</span><span class="p">):</span>
+</span><span data-line="203"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="204"><span class="sd">    Evaluates the board state using heuristics (Positional, Mobility, Coin Parity).</span>
+</span><span data-line="205">
+</span><span data-line="206"><span class="sd">    Args:</span>
+</span><span data-line="207"><span class="sd">        own (int): The bitboard of the current player&#39;s pieces.</span>
+</span><span data-line="208"><span class="sd">        opp (int): The bitboard of the opponent&#39;s pieces.</span>
+</span><span data-line="209"><span class="sd">        current_player_is_black (bool): True if the current player is Black.</span>
+</span><span data-line="210">
+</span><span data-line="211"><span class="sd">    Returns:</span>
+</span><span data-line="212"><span class="sd">        float: The heuristic score of the board state.</span>
+</span><span data-line="213"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="214">    <span class="c1"># 1. Positional</span>
+</span><span data-line="215">    <span class="n">my_score</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="216">    <span class="n">op_score</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="217">    <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">WEIGHT_MASKS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="218">        <span class="n">my_score</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">own</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="219">        <span class="n">op_score</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="n">opp</span> <span class="o">&amp;</span> <span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="220">    
+</span><span data-line="221">    <span class="n">positional_score</span> <span class="o">=</span> <span class="n">my_score</span> <span class="o">-</span> <span class="n">op_score</span>
+</span><span data-line="222">    
+</span><span data-line="223">    <span class="c1"># 2. Mobility</span>
+</span><span data-line="224">    <span class="n">my_moves_mask</span> <span class="o">=</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">)</span>
+</span><span data-line="225">    <span class="n">op_moves_mask</span> <span class="o">=</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">opp</span><span class="p">,</span> <span class="n">own</span><span class="p">)</span>
+</span><span data-line="226">    <span class="n">my_moves_count</span> <span class="o">=</span> <span class="n">my_moves_mask</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="227">    <span class="n">op_moves_count</span> <span class="o">=</span> <span class="n">op_moves_mask</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="228">    
+</span><span data-line="229">    <span class="k">if</span> <span class="n">my_moves_count</span> <span class="o">+</span> <span class="n">op_moves_count</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="230">        <span class="n">mobility_score</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">my_moves_count</span> <span class="o">-</span> <span class="n">op_moves_count</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">my_moves_count</span> <span class="o">+</span> <span class="n">op_moves_count</span><span class="p">)</span>
+</span><span data-line="231">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="232">        <span class="n">mobility_score</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="233">        
+</span><span data-line="234">    <span class="c1"># 3. Coin Parity</span>
+</span><span data-line="235">    <span class="n">my_coins</span> <span class="o">=</span> <span class="n">own</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="236">    <span class="n">op_coins</span> <span class="o">=</span> <span class="n">opp</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="237">    
+</span><span data-line="238">    <span class="k">if</span> <span class="n">my_coins</span> <span class="o">+</span> <span class="n">op_coins</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="239">        <span class="n">coin_parity_score</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">my_coins</span> <span class="o">-</span> <span class="n">op_coins</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">my_coins</span> <span class="o">+</span> <span class="n">op_coins</span><span class="p">)</span>
+</span><span data-line="240">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="241">        <span class="n">coin_parity_score</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span data-line="242">        
+</span><span data-line="243">    <span class="n">total_coins</span> <span class="o">=</span> <span class="n">my_coins</span> <span class="o">+</span> <span class="n">op_coins</span>
+</span><span data-line="244">    
+</span><span data-line="245">    <span class="k">if</span> <span class="n">total_coins</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+</span><span data-line="246">        <span class="k">return</span> <span class="n">positional_score</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mobility_score</span>
+</span><span data-line="247">    <span class="k">elif</span> <span class="n">total_coins</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+</span><span data-line="248">        <span class="k">return</span> <span class="n">positional_score</span> <span class="o">+</span> <span class="n">mobility_score</span> <span class="o">+</span> <span class="n">coin_parity_score</span>
+</span><span data-line="249">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="250">        <span class="k">return</span> <span class="n">positional_score</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">coin_parity_score</span></div>
+
+</span><span data-line="251">
+<div class="viewcode-block" id="minmax_bitboard">
+<a class="viewcode-back" href="../ai.html#ai.minmax_bitboard">[docs]</a>
+</span><span data-line="252"><span class="k">def</span><span class="w"> </span><span class="nf">minmax_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">maximizing_player</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player_color</span><span class="p">):</span>
+</span><span data-line="253"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="254"><span class="sd">    The MinMax algorithm with Alpha-Beta pruning using bitboards.</span>
+</span><span data-line="255">
+</span><span data-line="256"><span class="sd">    Args:</span>
+</span><span data-line="257"><span class="sd">        own (int): Bitboard for the current player.</span>
+</span><span data-line="258"><span class="sd">        opp (int): Bitboard for the opponent.</span>
+</span><span data-line="259"><span class="sd">        depth (int): The current depth of the search.</span>
+</span><span data-line="260"><span class="sd">        maximizing_player (bool): True if the current node is a maximizing node.</span>
+</span><span data-line="261"><span class="sd">        alpha (float): The alpha value for pruning.</span>
+</span><span data-line="262"><span class="sd">        beta (float): The beta value for pruning.</span>
+</span><span data-line="263"><span class="sd">        start_time (float): The time when the search started.</span>
+</span><span data-line="264"><span class="sd">        time_limit (float): The maximum allowed time for the search.</span>
+</span><span data-line="265"><span class="sd">        player_color (str): The color of the player (BLACK or WHITE).</span>
+</span><span data-line="266">
+</span><span data-line="267"><span class="sd">    Returns:</span>
+</span><span data-line="268"><span class="sd">        float: The best score found for the current board state.</span>
+</span><span data-line="269"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="270">    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">time_limit</span><span class="p">:</span>
+</span><span data-line="271">        <span class="k">raise</span> <span class="ne">TimeoutError</span>
+</span><span data-line="272">        
+</span><span data-line="273">    <span class="n">state_key</span> <span class="o">=</span> <span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">maximizing_player</span><span class="p">)</span>
+</span><span data-line="274">    
+</span><span data-line="275">    <span class="n">alpha_orig</span> <span class="o">=</span> <span class="n">alpha</span>
+</span><span data-line="276">    <span class="n">beta_orig</span> <span class="o">=</span> <span class="n">beta</span>
+</span><span data-line="277">    
+</span><span data-line="278">    <span class="k">if</span> <span class="n">state_key</span> <span class="ow">in</span> <span class="n">TRANSPOSITION_TABLE</span><span class="p">:</span>
+</span><span data-line="279">        <span class="n">entry</span> <span class="o">=</span> <span class="n">TRANSPOSITION_TABLE</span><span class="p">[</span><span class="n">state_key</span><span class="p">]</span>
+</span><span data-line="280">        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;depth&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">depth</span><span class="p">:</span>
+</span><span data-line="281">            <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;exact&#39;</span><span class="p">:</span>
+</span><span data-line="282">                <span class="k">return</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+</span><span data-line="283">            <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;lowerbound&#39;</span><span class="p">:</span>
+</span><span data-line="284">                <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
+</span><span data-line="285">            <span class="k">elif</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;upperbound&#39;</span><span class="p">:</span>
+</span><span data-line="286">                <span class="n">beta</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
+</span><span data-line="287">            <span class="k">if</span> <span class="n">alpha</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="p">:</span>
+</span><span data-line="288">                <span class="k">return</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+</span><span data-line="289">                
+</span><span data-line="290">    <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="291">        <span class="k">return</span> <span class="n">evaluate_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">player_color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span>
+</span><span data-line="292">        
+</span><span data-line="293">    <span class="n">moves_mask</span> <span class="o">=</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">)</span> <span class="k">if</span> <span class="n">maximizing_player</span> <span class="k">else</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">opp</span><span class="p">,</span> <span class="n">own</span><span class="p">)</span>
+</span><span data-line="294">    
+</span><span data-line="295">    <span class="k">if</span> <span class="n">moves_mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="296">        <span class="n">opp_moves_mask</span> <span class="o">=</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">opp</span><span class="p">,</span> <span class="n">own</span><span class="p">)</span> <span class="k">if</span> <span class="n">maximizing_player</span> <span class="k">else</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">)</span>
+</span><span data-line="297">        <span class="k">if</span> <span class="n">opp_moves_mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="298">            <span class="k">return</span> <span class="n">evaluate_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">player_color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span>
+</span><span data-line="299">        <span class="k">else</span><span class="p">:</span>
+</span><span data-line="300">            <span class="k">return</span> <span class="n">minmax_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="ow">not</span> <span class="n">maximizing_player</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player_color</span><span class="p">)</span>
+</span><span data-line="301">            
+</span><span data-line="302">    <span class="n">best_val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">maximizing_player</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+</span><span data-line="303">    
+</span><span data-line="304">    <span class="n">move_indices</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="305">    <span class="n">temp_moves</span> <span class="o">=</span> <span class="n">moves_mask</span>
+</span><span data-line="306">    <span class="k">while</span> <span class="n">temp_moves</span><span class="p">:</span>
+</span><span data-line="307">        <span class="n">lsb</span> <span class="o">=</span> <span class="n">temp_moves</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">temp_moves</span>
+</span><span data-line="308">        <span class="n">move_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lsb</span><span class="p">)</span>
+</span><span data-line="309">        <span class="n">temp_moves</span> <span class="o">^=</span> <span class="n">lsb</span>
+</span><span data-line="310">        
+</span><span data-line="311">    <span class="k">def</span><span class="w"> </span><span class="nf">get_weight</span><span class="p">(</span><span class="n">move_bit</span><span class="p">):</span>
+</span><span data-line="312">        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">WEIGHT_MASKS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="313">            <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">move_bit</span><span class="p">:</span>
+</span><span data-line="314">                <span class="k">return</span> <span class="n">w</span>
+</span><span data-line="315">        <span class="k">return</span> <span class="mi">0</span>
+</span><span data-line="316">        
+</span><span data-line="317">    <span class="n">move_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">get_weight</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="318">    
+</span><span data-line="319">    <span class="k">if</span> <span class="n">maximizing_player</span><span class="p">:</span>
+</span><span data-line="320">        <span class="k">for</span> <span class="n">move_bit</span> <span class="ow">in</span> <span class="n">move_indices</span><span class="p">:</span>
+</span><span data-line="321">            <span class="n">new_own</span><span class="p">,</span> <span class="n">new_opp</span> <span class="o">=</span> <span class="n">apply_move_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">move_bit</span><span class="p">)</span>
+</span><span data-line="322">            <span class="nb">eval</span> <span class="o">=</span> <span class="n">minmax_bitboard</span><span class="p">(</span><span class="n">new_own</span><span class="p">,</span> <span class="n">new_opp</span><span class="p">,</span> <span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player_color</span><span class="p">)</span>
+</span><span data-line="323">            <span class="n">best_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">best_val</span><span class="p">,</span> <span class="nb">eval</span><span class="p">)</span>
+</span><span data-line="324">            <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="nb">eval</span><span class="p">)</span>
+</span><span data-line="325">            <span class="k">if</span> <span class="n">beta</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="p">:</span>
+</span><span data-line="326">                <span class="k">break</span>
+</span><span data-line="327">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="328">        <span class="k">for</span> <span class="n">move_bit</span> <span class="ow">in</span> <span class="n">move_indices</span><span class="p">:</span>
+</span><span data-line="329">            <span class="n">new_opp</span><span class="p">,</span> <span class="n">new_own</span> <span class="o">=</span> <span class="n">apply_move_bitboard</span><span class="p">(</span><span class="n">opp</span><span class="p">,</span> <span class="n">own</span><span class="p">,</span> <span class="n">move_bit</span><span class="p">)</span>
+</span><span data-line="330">            <span class="nb">eval</span> <span class="o">=</span> <span class="n">minmax_bitboard</span><span class="p">(</span><span class="n">new_own</span><span class="p">,</span> <span class="n">new_opp</span><span class="p">,</span> <span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player_color</span><span class="p">)</span>
+</span><span data-line="331">            <span class="n">best_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">best_val</span><span class="p">,</span> <span class="nb">eval</span><span class="p">)</span>
+</span><span data-line="332">            <span class="n">beta</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="nb">eval</span><span class="p">)</span>
+</span><span data-line="333">            <span class="k">if</span> <span class="n">beta</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="p">:</span>
+</span><span data-line="334">                <span class="k">break</span>
+</span><span data-line="335">                
+</span><span data-line="336">    <span class="k">if</span> <span class="n">best_val</span> <span class="o">&lt;=</span> <span class="n">alpha_orig</span><span class="p">:</span>
+</span><span data-line="337">        <span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;upperbound&#39;</span>
+</span><span data-line="338">    <span class="k">elif</span> <span class="n">best_val</span> <span class="o">&gt;=</span> <span class="n">beta_orig</span><span class="p">:</span>
+</span><span data-line="339">        <span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;lowerbound&#39;</span>
+</span><span data-line="340">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="341">        <span class="n">flag</span> <span class="o">=</span> <span class="s1">&#39;exact&#39;</span>
+</span><span data-line="342">        
+</span><span data-line="343">    <span class="n">TRANSPOSITION_TABLE</span><span class="p">[</span><span class="n">state_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span data-line="344">        <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">best_val</span><span class="p">,</span>
+</span><span data-line="345">        <span class="s1">&#39;depth&#39;</span><span class="p">:</span> <span class="n">depth</span><span class="p">,</span>
+</span><span data-line="346">        <span class="s1">&#39;flag&#39;</span><span class="p">:</span> <span class="n">flag</span>
+</span><span data-line="347">    <span class="p">}</span>
+</span><span data-line="348">    <span class="k">return</span> <span class="n">best_val</span></div>
+
+</span><span data-line="349">
+<div class="viewcode-block" id="get_best_move">
+<a class="viewcode-back" href="../ai.html#ai.get_best_move">[docs]</a>
+</span><span data-line="350"><span class="k">def</span><span class="w"> </span><span class="nf">get_best_move</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">time_limit</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+</span><span data-line="351"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="352"><span class="sd">    Determines the best move for the given player using Iterative Deepening MinMax.</span>
+</span><span data-line="353">
+</span><span data-line="354"><span class="sd">    Args:</span>
+</span><span data-line="355"><span class="sd">        board (list): The current game board.</span>
+</span><span data-line="356"><span class="sd">        player (str): The color of the player.</span>
+</span><span data-line="357"><span class="sd">        time_limit (float): The maximum time allowed for calculation (default 2.0s).</span>
+</span><span data-line="358">
+</span><span data-line="359"><span class="sd">    Returns:</span>
+</span><span data-line="360"><span class="sd">        tuple: The coordinates (row, col) of the best move, or None if no move is possible.</span>
+</span><span data-line="361"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="362">    <span class="c1"># Check Opening Book</span>
+</span><span data-line="363">    <span class="n">opening_move</span> <span class="o">=</span> <span class="n">get_opening_move</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</span><span data-line="364">    <span class="k">if</span> <span class="n">opening_move</span><span class="p">:</span>
+</span><span data-line="365">        <span class="k">return</span> <span class="n">opening_move</span>
+</span><span data-line="366">
+</span><span data-line="367">    <span class="n">own</span><span class="p">,</span> <span class="n">opp</span> <span class="o">=</span> <span class="n">board_to_bitboards</span><span class="p">(</span><span class="n">board</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</span><span data-line="368">    
+</span><span data-line="369">    <span class="c1"># Endgame Solver Check</span>
+</span><span data-line="370">    <span class="n">empty_count</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">own</span> <span class="o">|</span> <span class="n">opp</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">FULL_MASK</span><span class="p">)</span><span class="o">.</span><span class="n">bit_count</span><span class="p">()</span>
+</span><span data-line="371">    <span class="k">if</span> <span class="n">empty_count</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">:</span>
+</span><span data-line="372">        <span class="n">depth</span> <span class="o">=</span> <span class="n">empty_count</span>
+</span><span data-line="373">        <span class="k">try</span><span class="p">:</span>
+</span><span data-line="374">            <span class="k">return</span> <span class="n">get_best_move_fixed_depth_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">time_limit</span> <span class="o">*</span> <span class="mi">5</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</span><span data-line="375">        <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+</span><span data-line="376">            <span class="k">pass</span>
+</span><span data-line="377">            
+</span><span data-line="378">    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span data-line="379">    <span class="n">depth</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span data-line="380">    <span class="n">max_depth</span> <span class="o">=</span> <span class="mi">64</span>
+</span><span data-line="381">    
+</span><span data-line="382">    <span class="n">current_best_move</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="383">    
+</span><span data-line="384">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="385">        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="386">            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">time_limit</span><span class="p">:</span>
+</span><span data-line="387">                <span class="k">break</span>
+</span><span data-line="388">            <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;</span> <span class="n">max_depth</span><span class="p">:</span>
+</span><span data-line="389">                <span class="k">break</span>
+</span><span data-line="390">                
+</span><span data-line="391">            <span class="n">move</span> <span class="o">=</span> <span class="n">get_best_move_fixed_depth_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
+</span><span data-line="392">            <span class="k">if</span> <span class="n">move</span><span class="p">:</span>
+</span><span data-line="393">                <span class="n">current_best_move</span> <span class="o">=</span> <span class="n">move</span>
+</span><span data-line="394">                
+</span><span data-line="395">            <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="396">            
+</span><span data-line="397">    <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+</span><span data-line="398">        <span class="k">pass</span>
+</span><span data-line="399">        
+</span><span data-line="400">    <span class="k">return</span> <span class="n">current_best_move</span></div>
+
+</span><span data-line="401">
+<div class="viewcode-block" id="get_best_move_fixed_depth_bitboard">
+<a class="viewcode-back" href="../ai.html#ai.get_best_move_fixed_depth_bitboard">[docs]</a>
+</span><span data-line="402"><span class="k">def</span><span class="w"> </span><span class="nf">get_best_move_fixed_depth_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span><span data-line="403"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="404"><span class="sd">    Helper function to find the best move at a fixed depth using bitboards.</span>
+</span><span data-line="405">
+</span><span data-line="406"><span class="sd">    Args:</span>
+</span><span data-line="407"><span class="sd">        own (int): Bitboard for the current player.</span>
+</span><span data-line="408"><span class="sd">        opp (int): Bitboard for the opponent.</span>
+</span><span data-line="409"><span class="sd">        depth (int): The depth to search.</span>
+</span><span data-line="410"><span class="sd">        time_limit (float): The time limit.</span>
+</span><span data-line="411"><span class="sd">        player (str): The player color.</span>
+</span><span data-line="412"><span class="sd">        start_time (float, optional): The start time of the search.</span>
+</span><span data-line="413">
+</span><span data-line="414"><span class="sd">    Returns:</span>
+</span><span data-line="415"><span class="sd">        tuple: The coordinates (row, col) of the best move.</span>
+</span><span data-line="416"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="417">    <span class="k">if</span> <span class="n">start_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="418">        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</span><span data-line="419">        
+</span><span data-line="420">    <span class="n">best_move</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span data-line="421">    <span class="n">max_eval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)</span>
+</span><span data-line="422">    <span class="n">alpha</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)</span>
+</span><span data-line="423">    <span class="n">beta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+</span><span data-line="424">    
+</span><span data-line="425">    <span class="n">moves_mask</span> <span class="o">=</span> <span class="n">get_valid_moves_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">)</span>
+</span><span data-line="426">    <span class="k">if</span> <span class="n">moves_mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span data-line="427">        <span class="k">return</span> <span class="kc">None</span>
+</span><span data-line="428">        
+</span><span data-line="429">    <span class="n">move_indices</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span data-line="430">    <span class="n">temp_moves</span> <span class="o">=</span> <span class="n">moves_mask</span>
+</span><span data-line="431">    <span class="k">while</span> <span class="n">temp_moves</span><span class="p">:</span>
+</span><span data-line="432">        <span class="n">lsb</span> <span class="o">=</span> <span class="n">temp_moves</span> <span class="o">&amp;</span> <span class="o">-</span><span class="n">temp_moves</span>
+</span><span data-line="433">        <span class="n">move_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lsb</span><span class="p">)</span>
+</span><span data-line="434">        <span class="n">temp_moves</span> <span class="o">^=</span> <span class="n">lsb</span>
+</span><span data-line="435">        
+</span><span data-line="436">    <span class="k">def</span><span class="w"> </span><span class="nf">get_weight</span><span class="p">(</span><span class="n">move_bit</span><span class="p">):</span>
+</span><span data-line="437">        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">WEIGHT_MASKS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span data-line="438">            <span class="k">if</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">move_bit</span><span class="p">:</span>
+</span><span data-line="439">                <span class="k">return</span> <span class="n">w</span>
+</span><span data-line="440">        <span class="k">return</span> <span class="mi">0</span>
+</span><span data-line="441">        
+</span><span data-line="442">    <span class="n">move_indices</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">get_weight</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="443">        
+</span><span data-line="444">    <span class="k">for</span> <span class="n">move_bit</span> <span class="ow">in</span> <span class="n">move_indices</span><span class="p">:</span>
+</span><span data-line="445">        <span class="n">new_own</span><span class="p">,</span> <span class="n">new_opp</span> <span class="o">=</span> <span class="n">apply_move_bitboard</span><span class="p">(</span><span class="n">own</span><span class="p">,</span> <span class="n">opp</span><span class="p">,</span> <span class="n">move_bit</span><span class="p">)</span>
+</span><span data-line="446">        <span class="nb">eval</span> <span class="o">=</span> <span class="n">minmax_bitboard</span><span class="p">(</span><span class="n">new_own</span><span class="p">,</span> <span class="n">new_opp</span><span class="p">,</span> <span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">start_time</span><span class="p">,</span> <span class="n">time_limit</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</span><span data-line="447">        
+</span><span data-line="448">        <span class="k">if</span> <span class="nb">eval</span> <span class="o">&gt;</span> <span class="n">max_eval</span><span class="p">:</span>
+</span><span data-line="449">            <span class="n">max_eval</span> <span class="o">=</span> <span class="nb">eval</span>
+</span><span data-line="450">            <span class="n">idx</span> <span class="o">=</span> <span class="n">move_bit</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span data-line="451">            <span class="n">best_move</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="n">idx</span> <span class="o">%</span> <span class="mi">8</span><span class="p">)</span>
+</span><span data-line="452">            
+</span><span data-line="453">        <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="nb">eval</span><span class="p">)</span>
+</span><span data-line="454">            
+</span><span data-line="455">    <span class="k">return</span> <span class="n">best_move</span></div>
+
+</span></pre></div>
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2023, Paarth Siloiya</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/shibuya.js?v=c1cf1a6b"></script></body>
+</html>
